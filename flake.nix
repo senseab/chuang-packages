@@ -33,7 +33,6 @@
         xorg.libSM
         xorg.libX11
         xorg.libXxf86vm
-
       ];
       inherit (pkgs) mkShell;
     in
