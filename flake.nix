@@ -5,11 +5,16 @@
   };
 
   outputs =
-    inputs:
+    {
+      self,
+      nixpkgs,
+      treefmt-nix,
+      ...
+    }:
     let
       system = "x86_64-linux";
-      pkgs = import inputs.nixpkgs { inherit system; };
-      treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+      pkgs = import nixpkgs { inherit system; };
+      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
       packages-inode = with pkgs; [
         libgcc
         libxcrypt-legacy
@@ -36,7 +41,7 @@
       ];
       inherit (pkgs) mkShell;
     in
-    rec {
+    {
       formatter.${system} = treefmtEval.config.build.wrapper;
       devShell."${system}" = mkShell {
         nativeBuildInputs = with pkgs; [
@@ -50,15 +55,20 @@
         h3c-inode-client = pkgs.callPackage ./h3c-inode-client/package.nix { };
       };
 
-      nixosModules = rec {
-        chuang-packages = {
-          pkgs-chuang = packages;
-          imports = [
-            ./h3c-inode-client/module.nix
-          ];
-        };
+      nixosModules =
+        let
+          pkgs-chuang = self.packages."${system}";
+        in
+        rec {
+          chuang-packages =
+            { config, lib, ... }:
+            {
+              imports = [
+                (import ./h3c-inode-client/module.nix { inherit lib pkgs-chuang config; })
+              ];
+            };
 
-        default = chuang-packages;
-      };
+          default = chuang-packages;
+        };
     };
 }
