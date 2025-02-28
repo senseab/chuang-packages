@@ -36,7 +36,7 @@
       ];
       inherit (pkgs) mkShell;
     in
-    {
+    rec {
       formatter.${system} = treefmtEval.config.build.wrapper;
       devShell."${system}" = mkShell {
         nativeBuildInputs = with pkgs; [
@@ -51,12 +51,14 @@
       };
 
       nixosModules = rec {
-        default = chuang-packages;
         chuang-packages = {
+          pkgs-chuang = packages;
           imports = [
             ./h3c-inode-client/module.nix
           ];
         };
+
+        default = chuang-packages;
       };
     };
 }
