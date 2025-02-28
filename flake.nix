@@ -5,10 +5,10 @@
   };
 
   outputs =
-    { nixpkgs, ... }@inputs:
+    inputs:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import inputs.nixpkgs { inherit system; };
       treefmtEval = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
       packages-inode = with pkgs; [
         libgcc
