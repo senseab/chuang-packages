@@ -115,8 +115,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cat > $out/bin/h3c-inode-client <<EOF
     #!/usr/bin/env bash
-    #$out${install_dir}/.iNode/iNodeClient
-    bash
+    $out${install_dir}/.iNode/iNodeClient
     EOF
     chmod +x $out/bin/h3c-inode-client
 
@@ -130,8 +129,6 @@ stdenv.mkDerivation {
 
     [ -d /var/log/inode/cmd ] || mkdir -p /var/log/inode/cmd 
     chmod 777 -R /var/log/inode
-
-    [ -e /etc/iNode/inodesys.conf ] || (mkdir -p /etc/iNode && ln -sf $out/etc/iNode/inodesys.conf /etc/iNode/inodesys.conf)
     EOF
     chmod +x $out/bin/setup
 

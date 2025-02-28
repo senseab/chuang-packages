@@ -47,25 +47,11 @@
       };
 
       packages."${system}" = {
-        dev-inode =
-          let
-            pkgs = import nixpkgs { inherit system; };
-          in
-          pkgs.buildFHSEnv {
-            name = "inode-dev-shell";
-            targetPkgs = pkgs: [ pkgs.makeWrapper ] ++ packages-inode;
-            profile = ''
-              export FHS=1
-              export PROMPT_COMMAND="echo -n '(FHS)'"
-            '';
-
-            extraBuildCommands = ''
-              echo $PATH
-              # mount --bind $HOME/.config/iNode/ $out/iNodeClient/clientfiles
-            '';
-          };
-
         h3c-inode-client = pkgs.callPackage ./h3c-inode-client/package.nix { };
+      };
+
+      nixosModules = {
+        h3c-inode-client = import ./h3c-inode-client/module.nix;
       };
     };
 }
