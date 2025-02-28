@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   ...
 }:
@@ -10,9 +9,7 @@ in
 {
   options.services.h3c-inode-client = {
     enable = lib.mkEnableOption "H3C iNodeClient - ssl vpn client.";
-    package = lib.mkPackageOption pkgs "h3c-inode-client" {
-      default = pkgs.callPackage ./package.nix { };
-    };
+    package = lib.mkPackageOption ./package.nix "h3c-inode-client" { };
   };
 
   config = lib.mkIf cfg.enable {
