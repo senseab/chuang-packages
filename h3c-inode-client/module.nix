@@ -26,7 +26,7 @@ in
       serviceConfig = {
         Type = "simple";
         RemainAfterExit = "yes";
-        ExecStartPre = "${cfg.package}/bin/setup.sh";
+        ExecStartPre = "${cfg.package}/bin/setup";
         ExecStart = "${cfg.package}/bin/AuthenMngService";
         ExecStop = "${cfg.package}/bin/AuthenMngService -k";
       };
