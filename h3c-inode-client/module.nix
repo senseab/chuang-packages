@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs-chuang,
   ...
 }:
 let
@@ -9,7 +10,7 @@ in
 {
   options.services.h3c-inode-client = {
     enable = lib.mkEnableOption "H3C iNodeClient - ssl vpn client.";
-    package = lib.mkPackageOption ./package.nix "h3c-inode-client" { };
+    package = lib.mkPackageOption pkgs-chuang "h3c-inode-client" { };
   };
 
   config = lib.mkIf cfg.enable {
