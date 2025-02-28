@@ -1,6 +1,4 @@
 {
-  description = "";
-  
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -22,6 +20,8 @@
         libz
         atk
         ell
+        bash
+        coreutils
         glib
         cairo
         ncurses5
@@ -39,12 +39,11 @@
     {
       formatter.${system} = treefmtEval.config.build.wrapper;
       devShell."${system}" = mkShell {
-        buildInputs =
-          with pkgs;
-          [
-            tokei
-          ]
-          ++ packages-inode;
+        nativeBuildInputs = with pkgs; [
+          tokei
+          nil
+        ];
+        buildInputs = packages-inode;
       };
 
       packages."${system}" = {
@@ -54,13 +53,19 @@
           in
           pkgs.buildFHSEnv {
             name = "inode-dev-shell";
-            buildInputs = packages-inode;
-            targetPkgs = pkgs: with pkgs; [ ] ++ packages;
+            targetPkgs = pkgs: [ pkgs.makeWrapper ] ++ packages-inode;
             profile = ''
               export FHS=1
               export PROMPT_COMMAND="echo -n '(FHS)'"
             '';
+
+            extraBuildCommands = ''
+              echo $PATH
+              # mount --bind $HOME/.config/iNode/ $out/iNodeClient/clientfiles
+            '';
           };
+
+        h3c-inode-client = pkgs.callPackage ./h3c-inode-client/package.nix { };
       };
     };
 }
