@@ -50,8 +50,13 @@
         h3c-inode-client = pkgs.callPackage ./h3c-inode-client/package.nix { };
       };
 
-      nixosModules = {
-        h3c-inode-client = import ./h3c-inode-client/module.nix;
+      nixosModules = rec {
+        default = chuang-packages;
+        chuang-packages = {
+          imports = [
+            ./h3c-inode-client/module.nix
+          ];
+        };
       };
     };
 }
