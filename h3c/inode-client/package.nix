@@ -73,21 +73,21 @@ stdenv.mkDerivation rec {
     # 安装应用文件
     mkdir -p $out${install_dir}
 
-    for i in $(ls -a $src); do
+    for i in $(ls $src); do
       if [ $i == "$src/clientfiles" ]; then
         continue
       fi
 
-      cp -r $i $out${install_dir}
+      cp -rv $i $out${install_dir}
     done
+    cp -rv $src/.iNode $out${install_dir}
 
-    for i in $(ls $out${install_dir}/*.ps); do
-      sed -i 's|#!/bin/sh|#!/usr/bin/env sh|' $i
-      chmod +x $i
-    done
+    sed -i 's|#!/bin/sh|#!/usr/bin/env sh|' $out${install_dir}/renew.ps
+    chmod +x $out${install_dir}/renew.ps
 
     # 禁用 enablecards.ps （清空文件内容）
-    head -n1 $out${install_dir}/enablecards.ps | tee $out${install_dir}/enablecards.ps
+    sed 's|#!/bin/sh|#!/usr/bin/env sh|' $out${install_dir}/enablecards.ps | head -n 1 | tee $out${install_dir}/enablecards.ps
+    chmod +x $out${install_dir}/enablecards.ps
 
     # 客户端配置目录
     rm -rf $out${install_dir}/clientfiles
