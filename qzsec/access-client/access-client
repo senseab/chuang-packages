@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH=$PATH:@PATH
+
 URL="$1"
 
 if [ "$URL" == "" ]; then
@@ -33,5 +35,9 @@ HOSTNAME=$(echo $ARGS | jq -r .hn)
 PORT_NUM=$(echo $ARGS | jq -r .pn)
 USERNAME=$(echo $ARGS | jq -r .un)
 PASSWORD=$(echo $ARGS | jq -r .pw)
+
+TITLE=$(echo $ARGS | jq -r .st)
+
+echo "Will connect to $TITLE..."
 
 passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME
