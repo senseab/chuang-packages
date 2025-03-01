@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -rv "${bin}" $out/bin
-    chmod +x $out/bin/*
+    cp -rv "${bin}" $out/bin/${pname}
+    chmod +x $out/bin/${pname}
 
     mkdir -p $out/share/applications
-    cp -rv "${desktop}" $out/share/applications
+    sed "/^Version=/s|@VERSION|${version}|" "${desktop}" | sed "/^Exec=/s|@EXEC|$out/bin/${pname}|" > "$out/share/applications/${pname}.desktop"
   '';
 }
