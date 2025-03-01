@@ -23,19 +23,20 @@ in
     environment.etc."iNode/inodesys.conf".source = "${cfg.package}/etc/iNode/inodesys.conf";
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services.h3c-inode-client = {
-      #wantedBy = [
-      #  "network-online.target"
-      #  "graphical.target"
-      #];
-      after = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "simple";
-        RemainAfterExit = "yes";
-        ExecStartPre = "${cfg.package}/bin/setup";
-        ExecStart = "${cfg.package}/bin/AuthenMngService";
-        ExecStop = "${cfg.package}/bin/AuthenMngService -k";
+    systemd.services.h3c-inode-client =
+      let
+        target = "network-online.target";
+      in
+      {
+        wants = [ target ];
+        after = [ target ];
+        serviceConfig = {
+          Type = "simple";
+          RemainAfterExit = "yes";
+          ExecStartPre = "${cfg.package}/bin/setup";
+          ExecStart = "${cfg.package}/bin/AuthenMngService";
+          ExecStop = "${cfg.package}/bin/AuthenMngService -k";
+        };
       };
-    };
   };
 }
