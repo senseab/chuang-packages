@@ -15,30 +15,6 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
       treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-      packages-inode = with pkgs; [
-        libgcc
-        libxcrypt-legacy
-        libuuid
-        libpng12
-        libjpeg
-        libudev0-shim
-        libz
-        atk
-        ell
-        bash
-        coreutils
-        glib
-        cairo
-        ncurses5
-        pango
-        gtk2
-        gdk-pixbuf
-        freetype
-        fontconfig
-        xorg.libSM
-        xorg.libX11
-        xorg.libXxf86vm
-      ];
       inherit (pkgs) mkShell;
     in
     {
@@ -48,7 +24,6 @@
           tokei
           nil
         ];
-        buildInputs = packages-inode;
       };
 
       packages."${system}" = {
