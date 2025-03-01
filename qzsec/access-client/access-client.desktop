@@ -9,5 +9,5 @@ Terminal=true
 Categories=System;ConsoleOnly;
 Keywords=system;h3c;
 NoDisplay=true
-Exec=@EXEC
-MimeType=x-scheme-handler/accessclient
+Exec=@EXEC %u
+MimeType=application/x-accessclient;
