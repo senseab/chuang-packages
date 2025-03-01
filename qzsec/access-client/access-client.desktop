@@ -10,4 +10,4 @@ Categories=System;ConsoleOnly;
 Keywords=system;h3c;
 NoDisplay=true
 Exec=@EXEC %u
-MimeType=application/x-accessclient;
+MimeType=application/x-accessclient;x-scheme-handler/accessclient;
