@@ -3,21 +3,26 @@
 URL="$1"
 
 if [ "$URL" == "" ]; then
-    echo "Usage: $0 accessclient://<args>"
+    echo "Usage: $0 accessclient://<url>"
     sleep 5
     exit 1
 fi
 
-if [ ! "$URL" == "accessclient://"* ]; then
-    echo "Invalid URL, should be accessclient://"
+if [ "$URL" == "accessclient://" ]; then
+    echo "Invalid URL"
     sleep 5
     exit 1
 fi
 
+if [[ "$URL" != "accessclient://"* ]]; then
+    echo "Invalid URL"
+    sleep 5
+    exit 1
+fi
 
 ARGS=$(echo $URL | sed 's|accessclient://||' | base64 -d | minideflate -d )
 
-APP=$(echo $ARGS | jq -r.app)
+APP=$(echo $ARGS | jq -r .app)
 if [ "$APP" != "putty" ]; then
     echo "Unsupported app, should be putty."
     sleep 5
