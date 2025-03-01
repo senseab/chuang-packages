@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=@VERSION
+Name=Access Client
+GenericName=Access Client
+Comment=Resource monitor that shows usage and stats for processor, memory, disks, network and processes
+Comment[zh_CN]=齐治、H3C 运维审计系统连接代理
+Terminal=true
+Categories=System;ConsoleOnly;
+Keywords=system;h3c;
+NoDisplay=true
+Exec=@EXEC
+MimeType=x-scheme-handler/accessclient

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+URL="$1"
+
+ARGS=$(echo $URL | sed 's|accessclient://||' | base64 -d | minideflate -d )
+
+APP=$(echo $ARGS | jq -r.app)
+if [ "$APP" != "putty" ]; then
+    echo "Unsupported app, should be putty."
+    sleep 5
+    exit 1
+fi
+
+HOSTNAME=$(echo $ARGS | jq -r .hn)
+PORT_NUM=$(echo $ARGS | jq -r .pn)
+USERNAME=$(echo $ARGS | jq -r .un)
+PASSWORD=$(echo $ARGS | jq -r .pw)
+
+passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME

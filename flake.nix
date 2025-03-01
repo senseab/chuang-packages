@@ -28,6 +28,7 @@
 
       packages."${system}" = {
         h3c = import ./h3c { inherit pkgs; };
+        qzsec = import ./qzsec { inherit pkgs; };
       };
 
       nixosModules =
