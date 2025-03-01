@@ -10,7 +10,13 @@ in
 {
   options.services.h3c-inode-client = {
     enable = lib.mkEnableOption "H3C iNodeClient - ssl vpn client.";
-    package = lib.mkPackageOption pkgs-chuang "h3c-inode-client" { };
+    package = lib.mkPackageOption pkgs-chuang "h3c.inode-client" {
+      pkgsText = "pkgs-chuang";
+      default = [
+        "h3c"
+        "inode-client"
+      ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -18,10 +24,10 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.h3c-inode-client = {
-      wantedBy = [
-        "network-online.target"
-        "graphical.target"
-      ];
+      #wantedBy = [
+      #  "network-online.target"
+      #  "graphical.target"
+      #];
       after = [ "network-online.target" ];
       serviceConfig = {
         Type = "simple";

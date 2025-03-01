@@ -52,7 +52,7 @@
       };
 
       packages."${system}" = {
-        h3c-inode-client = pkgs.callPackage ./h3c-inode-client/package.nix { };
+        h3c = import ./h3c { inherit pkgs; };
       };
 
       nixosModules =
@@ -64,7 +64,7 @@
             { config, lib, ... }:
             {
               imports = [
-                (import ./h3c-inode-client/module.nix { inherit lib pkgs-chuang config; })
+                (import ./h3c/inode-client/module.nix { inherit lib pkgs-chuang config; })
               ];
             };
 

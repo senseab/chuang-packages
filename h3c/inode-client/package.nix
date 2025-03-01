@@ -53,8 +53,8 @@ let
     xorg.libXxf86vm
   ];
 in
-stdenv.mkDerivation {
-  pname = "h3c-inode-client";
+stdenv.mkDerivation rec {
+  pname = "inode-client";
   version = "7.3.0";
 
   src = fetchTarball {
@@ -113,11 +113,11 @@ stdenv.mkDerivation {
 
     # 运行文件
     mkdir -p $out/bin
-    cat > $out/bin/h3c-inode-client <<EOF
+    cat > $out/bin/${pname} <<EOF
     #!/usr/bin/env bash
     $out${install_dir}/.iNode/iNodeClient
     EOF
-    chmod +x $out/bin/h3c-inode-client
+    chmod +x $out/bin/${pname}
 
     cat > $out/bin/setup <<EOF
     #!/usr/bin/env bash
