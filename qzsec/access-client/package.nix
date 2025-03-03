@@ -1,6 +1,5 @@
 {
   stdenv,
-  lib,
 
   jq,
   zlib-ng,
@@ -8,6 +7,7 @@
   coreutils,
   openssh,
   which,
+  xdg-terminal-exec,
   ...
 }:
 let
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     passh
     coreutils
     openssh
+    xdg-terminal-exec
   ];
 
   nativeBuildInputs = [
@@ -35,13 +36,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    sed "/^export PATH=/s|@PATH|${coreutils}/bin:${jq}/bin:${passh}/bin:${zlib-ng.bin}/bin:${openssh}/bin|" "${bin}" > $out/bin/${pname}
+    sed "/^export PATH=/s|@PATH|${coreutils}/bin:${jq}/bin:${passh}/bin:${zlib-ng.bin}/bin:${openssh}/bin:${xdg-terminal-exec}/bin|" "${bin}" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
 
     mkdir -p $out/share/applications
-    sed "/^Version=/s|@VERSION|${version}|" "${desktop}" | sed "/^Exec=/s|@EXEC|$out/bin/${pname}|" > "$out/share/applications/${pname}.desktop"
+    cat "${desktop}" | sed "/^Exec=/s|@EXEC|$out/bin/${pname}|" > "$out/share/applications/${pname}.desktop"
 
     echo "PATH: $PATH"
-    which jq && which minideflate && which passh && which ssh || exit 1
+    which jq && which minideflate && which passh && which ssh && which xdg-terminal-exec || exit 1
   '';
 }

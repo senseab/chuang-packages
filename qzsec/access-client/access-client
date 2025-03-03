@@ -40,4 +40,4 @@ TITLE=$(echo $ARGS | jq -r .st)
 
 echo "Will connect to $TITLE..."
 
-passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME
+xdg-terminal-exec passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME
