@@ -25,19 +25,26 @@ fi
 ARGS=$(echo $URL | sed 's|accessclient://||' | base64 -d | minideflate -d )
 
 APP=$(echo $ARGS | jq -r .app)
-if [ "$APP" != "putty" ]; then
-    echo "Unsupported app, should be putty."
+if [ "$APP" == "putty" ]; then
+    TITLE=$(echo $ARGS | jq -r .st)
+    HOSTNAME=$(echo $ARGS | jq -r .hn)
+    PORT_NUM=$(echo $ARGS | jq -r .pn)
+    USERNAME=$(echo $ARGS | jq -r .un)
+    PASSWORD=$(echo $ARGS | jq -r .pw)
+    echo "Will connect to $TITLE..."
+    xdg-terminal-exec passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME
+elif [ "$APP" == "filezilla" ]; then
+    TITLE=$(echo $ARGS | jq -r .st)
+    HOSTNAME=$(echo $ARGS | jq -r .Host)
+    PORT_NUM=$(echo $ARGS | jq -r .Port)
+    USERNAME=$(echo $ARGS | jq -r .User)
+    PASSWORD=$(echo $ARGS | jq -r .PWD)
+
+    filebinary=$(which org.filezillaproject.Filezilla || which filezilla )
+    
+    "$filebinary" "sftp://$USERNAME:$PASSWORD@$HOSTNAME:$PORT_NUM"
+else
+    echo "Unsupported app."
     sleep 5
     exit 1
 fi
-
-HOSTNAME=$(echo $ARGS | jq -r .hn)
-PORT_NUM=$(echo $ARGS | jq -r .pn)
-USERNAME=$(echo $ARGS | jq -r .un)
-PASSWORD=$(echo $ARGS | jq -r .pw)
-
-TITLE=$(echo $ARGS | jq -r .st)
-
-echo "Will connect to $TITLE..."
-
-xdg-terminal-exec passh -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa -p $PORT_NUM $USERNAME@$HOSTNAME
