@@ -39,10 +39,7 @@ elif [ "$APP" == "filezilla" ]; then
     PORT_NUM=$(echo $ARGS | jq -r .Port)
     USERNAME=$(echo $ARGS | jq -r .User)
     PASSWORD=$(echo $ARGS | jq -r .PWD)
-
-    filebinary=$(which org.filezillaproject.Filezilla || which filezilla )
-    
-    "$filebinary" "sftp://$USERNAME:$PASSWORD@$HOSTNAME:$PORT_NUM"
+    filezilla "sftp://$USERNAME:$PASSWORD@$HOSTNAME:$PORT_NUM"
 else
     echo "Unsupported app."
     sleep 5
